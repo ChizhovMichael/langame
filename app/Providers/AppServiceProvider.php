@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\PostIntegration\PostIntegrationInterface;
+use App\Services\PostIntegration\PostIntegrationService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +15,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(PostIntegrationInterface::class, function ($app) {
+            return new PostIntegrationService(
+                strval(config('services.news-api.url')),
+                strval(config('services.news-api.token')),
+            );
+        });
     }
 
     /**
