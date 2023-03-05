@@ -2,14 +2,15 @@
 
 namespace App\Services\PostIntegration;
 
+use App\DataTransfer\Response\PostResponse;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Collection;
 
 interface PostIntegrationInterface
 {
     /**
-     * @return Collection
+     * @param string|null $page
+     * @return PostResponse
      * @throws RequestException
      */
-    public function getPosts(): Collection;
+    public function getPosts(?string  $page = null): PostResponse;
 }

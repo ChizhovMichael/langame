@@ -8,27 +8,19 @@ use Illuminate\Support\Collection;
 class PostFactory
 {
     /**
-     * @param array $posts
-     * @return Collection
-     */
-    public static function collection(array $posts): Collection
-    {
-        return (new Collection($posts))->map(function ($post) {
-            return static::make($post);
-        });
-    }
-
-    /**
-     * @param array $attributes
+     * @param string $title
+     * @param string|null $description
+     * @param string|null $content
+     * @param Collection $rubrics
      * @return Post
      */
-    public static function make(array $attributes): Post
+    public static function make(
+        string $title,
+        ?string $description,
+        ?string $content,
+        Collection $rubrics
+    ): Post
     {
-        return new Post(
-            $attributes['title'],
-            $attributes['description'],
-            $attributes['content'],
-            $attributes['category']
-        );
+        return new Post($title, $description, $content, $rubrics);
     }
 }

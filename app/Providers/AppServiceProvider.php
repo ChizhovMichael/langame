@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Services\PostIntegration\PostIntegrationInterface;
 use App\Services\PostIntegration\PostIntegrationService;
+use App\Services\PostService;
+use App\Services\PostServiceInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
                 strval(config('services.news-api.token')),
             );
         });
+        $this->app->bind(PostServiceInterface::class, PostService::class);
+        $this->app->register(RepositoryServiceProvider::class);
     }
 
     /**

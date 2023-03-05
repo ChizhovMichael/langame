@@ -2,6 +2,8 @@
 
 namespace App\DataTransfer;
 
+use Illuminate\Support\Collection;
+
 class Post
 {
     /** @var string */
@@ -13,21 +15,21 @@ class Post
     /** @var string|null */
     private $content;
 
-    /** @var array */
-    private $category;
+    /** @var Collection */
+    private $rubrics;
 
     /**
      * @param string $title
      * @param string|null $description
      * @param string|null $content
-     * @param array $category
+     * @param Collection $rubrics
      */
-    public function __construct(string $title, ?string $description, ?string $content, array $category)
+    public function __construct(string $title, ?string $description, ?string $content, Collection $rubrics)
     {
         $this->title = $title;
         $this->description = $description;
         $this->content = $content;
-        $this->category = $category;
+        $this->rubrics = $rubrics;
     }
 
     /**
@@ -55,10 +57,10 @@ class Post
     }
 
     /**
-     * @return array
+     * @return Collection
      */
-    public function getCategory(): array
+    public function getRubrics(): Collection
     {
-        return $this->category;
+        return $this->rubrics;
     }
 }
