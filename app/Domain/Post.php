@@ -1,11 +1,12 @@
 <?php
 
-namespace App\DataTransfer;
-
-use Illuminate\Support\Collection;
+namespace App\Domain;
 
 class Post
 {
+    /** @var int|null */
+    private $id;
+
     /** @var string */
     private $title;
 
@@ -15,21 +16,18 @@ class Post
     /** @var string|null */
     private $content;
 
-    /** @var Collection */
-    private $rubrics;
-
     /**
+     * @param int|null $id
      * @param string $title
      * @param string|null $description
      * @param string|null $content
-     * @param Collection $rubrics
      */
-    public function __construct(string $title, ?string $description, ?string $content, Collection $rubrics)
+    public function __construct(?int $id, string $title, ?string $description, ?string $content)
     {
+        $this->id = $id;
         $this->title = $title;
         $this->description = $description;
         $this->content = $content;
-        $this->rubrics = $rubrics;
     }
 
     /**
@@ -57,10 +55,10 @@ class Post
     }
 
     /**
-     * @return Collection
+     * @return int|null
      */
-    public function getRubrics(): Collection
+    public function getId(): ?int
     {
-        return $this->rubrics;
+        return $this->id;
     }
 }

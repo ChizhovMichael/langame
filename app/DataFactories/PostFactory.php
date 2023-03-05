@@ -2,25 +2,24 @@
 
 namespace App\DataFactories;
 
-use App\DataTransfer\Post;
-use Illuminate\Support\Collection;
+use App\Domain\Post;
 
 class PostFactory
 {
     /**
+     * @param int|null $id
      * @param string $title
      * @param string|null $description
      * @param string|null $content
-     * @param Collection $rubrics
      * @return Post
      */
     public static function make(
+        ?int $id,
         string $title,
         ?string $description,
-        ?string $content,
-        Collection $rubrics
+        ?string $content
     ): Post
     {
-        return new Post($title, $description, $content, $rubrics);
+        return new Post($id, $title, $description, $content);
     }
 }

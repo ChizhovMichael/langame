@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\DataFactories\PostFactory;
+use App\Domain\Post as PostDomain;
 use App\Models\Post;
 
 class PostRepository implements PostRepositoryInterface
@@ -20,10 +22,15 @@ class PostRepository implements PostRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function create(array $payload): int
+    public function create(array $payload): PostDomain
     {
         $post = $this->model->with([])->create($payload);
 
-        return $post->id;
+        return PostFactory::make(
+            $post->id,
+            $post->title,
+            $post->description,
+            $post->content
+        );
     }
 }

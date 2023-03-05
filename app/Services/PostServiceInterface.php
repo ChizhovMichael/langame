@@ -2,13 +2,20 @@
 
 namespace App\Services;
 
-use App\DataTransfer\Post;
+use App\DataTransfer\Request\PostRequest;
+use App\Domain\Post;
 
 interface PostServiceInterface
 {
     /**
-     * @param Post $post
+     * @param PostRequest $post
      * @return void
      */
-    public function importPost(Post $post): void;
+    public function importPost(PostRequest $post): void;
+
+    /**
+     * @param PostRequest $post
+     * @return Post
+     */
+    public function createPost(PostRequest $post): Post;
 }

@@ -2,17 +2,17 @@
 
 namespace App\DataFactories;
 
-use App\DataTransfer\Rubric;
+use App\Domain\Rubric;
 
 class RubricFactory
 {
     /**
+     * @param int|null $id
      * @param string $name
-     * @param array $parentIds
      * @return Rubric
      */
-    public static function make(string $name, array $parentIds = []): Rubric
+    public static function make(?int $id, string $name): Rubric
     {
-        return new Rubric($name, $parentIds);
+        return new Rubric($id, $name);
     }
 }

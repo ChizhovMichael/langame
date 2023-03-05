@@ -2,33 +2,32 @@
 
 namespace App\Repositories;
 
-use App\DataTransfer\Rubric;
-use App\DataTransfer\Rubric as RubricDataTransfer;
+use App\Domain\Rubric as RubricDomain;
 
 interface RubricRepositoryInterface
 {
     /**
      * @param array $payload
      * @param array $parents
-     * @return int
+     * @return void
      */
-    public function create(array $payload, array $parents = []): int;
+    public function create(array $payload, array $parents = []): RubricDomain;
 
 
     /**
      * @param array $expression
      * @param array $columns
-     * @return RubricDataTransfer|null
+     * @return RubricDomain|null
      */
     public function findByColumns(
         array $expression = [],
         array $columns = ['*']
-    ): ?RubricDataTransfer;
+    ): ?RubricDomain;
 
     /**
      * @param int $postId
-     * @param RubricDataTransfer $rubric
+     * @param int $rubricId
      * @return void
      */
-    public function link(int $postId, Rubric $rubric): void;
+    public function link(int $postId, int $rubricId): void;
 }

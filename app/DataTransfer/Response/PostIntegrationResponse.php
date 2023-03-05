@@ -4,7 +4,7 @@ namespace App\DataTransfer\Response;
 
 use Illuminate\Support\Collection;
 
-class PostResponse
+class PostIntegrationResponse
 {
     /** @var Collection */
     private $posts;

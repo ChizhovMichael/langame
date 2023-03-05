@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\DataFactories\RubricFactory;
-use App\DataTransfer\Rubric as RubricDataTransfer;
+use App\Domain\Rubric as RubricDomain;
 use App\Models\Rubric;
 
 class RubricRepository implements RubricRepositoryInterface
@@ -22,7 +22,7 @@ class RubricRepository implements RubricRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function create(array $payload, array $parents = []): int
+    public function create(array $payload, array $parents = []): RubricDomain
     {
         $rubric = $this->model->with([])->create($payload);
         if (count($parents)) {
@@ -39,7 +39,10 @@ class RubricRepository implements RubricRepositoryInterface
             ]);
         }
 
-        return $rubric->id;
+        return RubricFactory::make(
+            $rubric->id,
+            $rubric->name
+        );
     }
 
     /**
@@ -48,36 +51,32 @@ class RubricRepository implements RubricRepositoryInterface
     public function findByColumns(
         array $expression = [],
         array $columns = ['*']
-    ): ?RubricDataTransfer
+    ): ?RubricDomain
     {
         $rubric = $this->model->with([])->select($columns)->where($expression)->first();
-        if (!$rubric) {
-            return null;
-        }
+        if (!$rubric) return null;
 
         return RubricFactory::make(
+            $rubric->id,
             $rubric->name,
-            $rubric->container->pluck('parent_id')->toArray()
         );
     }
 
     /**
      * @inheritDoc
      */
-    public function link(int $postId, RubricDataTransfer $rubric): void
+    public function link(int $postId, int $rubricId): void
     {
         $rubric = $this->model->with([])->where([
-            'name' => $rubric->getName()
+            'id' => $rubricId
         ])->first();
-        if ($rubric) {
-            $containers = $rubric->container->pluck('id')->toArray();
-
-            foreach ($containers as $container) {
-                $rubric->relationship()->create([
-                    'post_id' => $postId,
-                    'rubric_container_id' => $container
-                ]);
-            }
+        if (!$rubric) return;
+        $containers = $rubric->container->pluck('id')->toArray();
+        foreach ($containers as $container) {
+            $rubric->relationship()->create([
+                'post_id' => $postId,
+                'rubric_container_id' => $container
+            ]);
         }
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\DataTransfer\Post;
-use App\DataTransfer\Rubric;
+use App\DataTransfer\Request\PostRequest;
+use App\Domain\Post;
 use App\Repositories\PostRepositoryInterface;
 use App\Repositories\RubricRepositoryInterface;
 
@@ -29,40 +29,47 @@ class PostService implements PostServiceInterface
     }
 
     /**
-     * @param Rubric $rubric
-     * @return void
+     * @param string $rubricName
+     * @return int
      */
-    private function importRubric(Rubric $rubric): void
+    private function importRubric(string $rubricName): int
     {
-        $name = $rubric->getName();
         $rubric = $this->rubricRepository->findByColumns([
-            'name' => $name
+            'name' => $rubricName
         ]);
-        if (!$rubric) {
-            $this->rubricRepository->create([
-                'name' => $name
-            ]);
-        }
+        if ($rubric) return $rubric->getId();
+        return $this->rubricRepository->create([
+            'name' => $rubricName
+        ])->getId();
     }
 
     /**
      * @inheritDoc
      */
-    public function importPost(Post $post): void
+    public function importPost(PostRequest $post): void
     {
-        $rubrics = $post->getRubrics();
-        foreach ($rubrics as $rubric) {
-            $this->importRubric($rubric);
+        $category = [];
+        foreach ($post->getCategory() as $rubricName) {
+            $category[] = $this->importRubric($rubricName);
         }
-        $postId = $this->postRepository->create([
+        $post->setCategory($category);
+        $this->createPost($post);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createPost(PostRequest $post): Post
+    {
+        $dt = $this->postRepository->create([
             'title' => $post->getTitle(),
             'description' => $post->getDescription(),
             'content' => $post->getContent()
         ]);
-        if ($postId) {
-            foreach ($rubrics as $rubric) {
-                $this->rubricRepository->link($postId, $rubric);
-            }
+        foreach ($post->getCategory() as $rubricId) {
+            $this->rubricRepository->link($dt->getId(), $rubricId);
         }
+
+        return $dt;
     }
 }
