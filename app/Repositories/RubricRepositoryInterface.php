@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Domain\Rubric as RubricDomain;
+use Illuminate\Support\Collection;
 
 interface RubricRepositoryInterface
 {
@@ -30,4 +31,11 @@ interface RubricRepositoryInterface
      * @return void
      */
     public function link(int $postId, int $rubricId): void;
+
+    /**
+     * @param array $columns
+     * @param array $relations
+     * @return Collection
+     */
+    public function all(array $columns = ['*'], array $relations = []): Collection;
 }

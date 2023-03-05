@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\DataFactories\RubricFactory;
 use App\Domain\Rubric as RubricDomain;
 use App\Models\Rubric;
+use Illuminate\Support\Collection;
 
 class RubricRepository implements RubricRepositoryInterface
 {
@@ -78,5 +79,21 @@ class RubricRepository implements RubricRepositoryInterface
                 'rubric_container_id' => $container
             ]);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function all(array $columns = ['*'], array $relations = []): Collection
+    {
+        $rubrics = $this->model->with($relations)->get($columns);
+
+        return (new Collection($rubrics))->map(function ($item) {
+            return RubricFactory::createResponse(
+                $item->id,
+                $item->name,
+                $item->container->first()->parent_id
+            );
+        }) ;
     }
 }

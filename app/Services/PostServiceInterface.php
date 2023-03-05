@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\DataTransfer\Request\PostRequest;
 use App\Domain\Post;
+use Illuminate\Support\Collection;
 
 interface PostServiceInterface
 {
@@ -18,4 +19,9 @@ interface PostServiceInterface
      * @return Post
      */
     public function createPost(PostRequest $post): Post;
+
+    /**
+     * @return Collection
+     */
+    public function getRubrics(): Collection;
 }

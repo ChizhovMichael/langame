@@ -6,6 +6,7 @@ use App\DataTransfer\Request\PostRequest;
 use App\Domain\Post;
 use App\Repositories\PostRepositoryInterface;
 use App\Repositories\RubricRepositoryInterface;
+use Illuminate\Support\Collection;
 
 class PostService implements PostServiceInterface
 {
@@ -71,5 +72,13 @@ class PostService implements PostServiceInterface
         }
 
         return $dt;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRubrics(): Collection
+    {
+        return $this->rubricRepository->all(['*'], ['container']);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\DataFactories;
 
+use App\DataTransfer\Response\RubricResponse;
 use App\Domain\Rubric;
 
 class RubricFactory
@@ -14,5 +15,16 @@ class RubricFactory
     public static function make(?int $id, string $name): Rubric
     {
         return new Rubric($id, $name);
+    }
+
+    /**
+     * @param int $id
+     * @param string $name
+     * @param int|null $parent_id
+     * @return RubricResponse
+     */
+    public static function createResponse(int $id, string $name, ?int $parent_id = null): RubricResponse
+    {
+        return new RubricResponse($id, $name, $parent_id);
     }
 }
