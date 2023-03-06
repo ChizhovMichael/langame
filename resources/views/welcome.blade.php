@@ -100,6 +100,10 @@
                         @endif
                     </div>
                     <div class="col-12 col-sm-6 col-md-8">
+                        <div class="form-group mb-3">
+                            <label for="search">Search</label>
+                            <input type="text" id="search" class="form-control" placeholder="Search...">
+                        </div>
                         <div class="row" id="posts-container"></div>
                     </div>
                 </div>

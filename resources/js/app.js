@@ -50,26 +50,30 @@ function card(title, description, rubrics, state) {
     `;
 }
 
-async function posts() {
+function render(data) {
     let container = document.getElementById('posts-container');
 
     if (!container)
         return;
+    container.innerHTML = "";
 
+    data.forEach((post) => {
+        let rubrics = post.rubrics.map((rubric) => {
+            return `<span class="badge bg-light text-dark me-1">${rubric.name}</span>`
+        })
+        container.insertAdjacentHTML('beforeend', card(
+            post.title,
+            post.description,
+            rubrics
+        ));
+    })
+}
+
+async function posts() {
     try {
         const response = await axios.get(`/api/posts`);
-        const data = response.data.data;
 
-        data.forEach((post) => {
-            let rubrics = post.rubrics.map((rubric) => {
-                return `<span class="badge bg-light text-dark me-1">${rubric.name}</span>`
-            })
-            container.insertAdjacentHTML('beforeend', card(
-                post.title,
-                post.description,
-                rubrics
-            ));
-        })
+        render(response.data.data);
     } catch (error) {
         console.error(error)
     }
@@ -128,6 +132,27 @@ function create() {
     })
 }
 
+// search
+function search() {
+    let search = document.getElementById('search');
+    let delay;
+
+    search.addEventListener('input', function () {
+        clearTimeout(delay);
+        delay = setTimeout(async function() {
+            try {
+                const response = await axios.post(`/api/search`, {
+                    search: search.value
+                });
+                render(response.data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }, 1000);
+    })
+}
+
 rubrics();
 posts();
 create();
+search();

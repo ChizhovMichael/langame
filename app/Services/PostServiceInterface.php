@@ -34,7 +34,8 @@ interface PostServiceInterface
     public function createRubric(RubricRequest $rubric): Rubric;
 
     /**
+     * @param string|null $search
      * @return Collection
      */
-    public function getPosts(): Collection;
+    public function getPosts(?string $search = null): Collection;
 }

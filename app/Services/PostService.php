@@ -108,9 +108,16 @@ class PostService implements PostServiceInterface
     /**
      * @inheritDoc
      */
-    public function getPosts(): Collection
+    public function getPosts(?string $search = null): Collection
     {
-        $postRelations = $this->postRepository->getPostsWithRelations([], ['*'], ['relationship']);
+        $expression = [];
+        if ($search && strlen($search)) {
+            $expression = [
+                ['title', 'like', '%'.$search.'%']
+            ];
+        }
+
+        $postRelations = $this->postRepository->getPostsWithRelations($expression, ['*'], ['relationship']);
 
         return $postRelations->map(function ($postRelation) {
             $rubrics = (new Collection($postRelation->getRelationshipIds()))->map(function ($relationshipId) {

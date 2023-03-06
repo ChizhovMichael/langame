@@ -32,7 +32,7 @@ class PostController extends Controller
         $response = $this->service->getPosts();
 
         return response()->json([
-            'data' => new PostCollection($response),
+            'data' => new PostCollection($response->sortDesc()),
         ]);
     }
 
@@ -59,6 +59,24 @@ class PostController extends Controller
 
         return response()->json([
             'data' => new PostResource($post)
+        ]);
+    }
+
+    /**
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return JsonResponse
+     */
+    public function search(Request $request): JsonResponse
+    {
+        $request->validate([
+            'search' => 'max:255|nullable',
+        ]);
+
+        $response = $this->service->getPosts($request->get('search'));
+
+        return response()->json([
+            'data' => new PostCollection($response->sortDesc()),
         ]);
     }
 }

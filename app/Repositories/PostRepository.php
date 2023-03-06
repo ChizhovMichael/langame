@@ -40,7 +40,7 @@ class PostRepository implements PostRepositoryInterface
      */
     public function getPostsWithRelations(array $expression = [], array $columns = ['*'], array $relations = []): Collection
     {
-        $posts = $this->model->with($relations)->get($columns);
+        $posts = $this->model->with($relations)->where($expression)->get($columns);
 
         return (new Collection($posts))->map(function ($item) {
             $container = $item->relationship;
