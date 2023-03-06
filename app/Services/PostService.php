@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\DataTransfer\Request\PostRequest;
+use App\DataTransfer\Request\RubricRequest;
 use App\Domain\Post;
+use App\Domain\Rubric;
 use App\Repositories\PostRepositoryInterface;
 use App\Repositories\RubricRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -80,5 +82,15 @@ class PostService implements PostServiceInterface
     public function getRubrics(): Collection
     {
         return $this->rubricRepository->all(['*'], ['container']);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createRubric(RubricRequest $rubric): Rubric
+    {
+        return $this->rubricRepository->create([
+            'name' => $rubric->getName()
+        ], $rubric->getParent());
     }
 }

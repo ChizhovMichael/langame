@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\DataTransfer\Request\PostRequest;
+use App\DataTransfer\Request\RubricRequest;
 use App\Services\PostServiceInterface;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -19,7 +21,11 @@ class PostController extends Controller
         $this->service = $service;
     }
 
-    public function store(Request $request)
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function storePost(Request $request): RedirectResponse
     {
         $request->validate([
             'title' => 'required|max:255',
@@ -32,6 +38,24 @@ class PostController extends Controller
             $category,
         );
         $this->service->createPost($dt);
-        return redirect()->back()->with('status', 'Blog Post Form Data Has Been inserted');
+        return redirect()->back()->with('posts', 'Blog Post Form Data Has Been inserted');
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function storeRubric(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'rubric' => 'required|max:200',
+        ]);
+        $parent = $request->get('parent') ?? null;
+        $dt = new RubricRequest(
+            $request->get('rubric'),
+            $parent
+        );
+        $this->service->createRubric($dt);
+        return redirect()->back()->with('rubrics', 'Blog Rubric Form Data Has Been inserted');
     }
 }

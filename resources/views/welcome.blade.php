@@ -15,7 +15,7 @@
                     </div>
                     <div class="col-12 col-md-6">
                         <h4>Not asynchronous</h4>
-                        <form method="post" action="{{url('store-form')}}" class="mb-3">
+                        <form method="post" action="{{url('store-post')}}" class="mb-3">
                             @csrf
                             <div class="form-group mb-3">
                                 <label for="title">Title</label>
@@ -36,9 +36,9 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
-                        @if(session('status'))
+                        @if(session('posts'))
                             <div class="alert alert-success">
-                                {{ session('status') }}
+                                {{ session('posts') }}
                             </div>
                         @endif
                         @if ($errors->has('title'))
@@ -47,6 +47,39 @@
                             </span>
                         @endif
                     </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <h5>Create rubric</h5>
+                        <form method="post" action="{{url('store-rubric')}}" class="mb-3">
+                            @csrf
+                            <div class="form-group mb-3">
+                                <label for="rubric">Title</label>
+                                <input type="text" id="rubric" name="rubric" class="form-control" required="">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="parent">Parent category</label>
+                                <select name="parent" id="parent" class="form-select js-rubrics" data-default>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                        @if(session('rubrics'))
+                            <div class="alert alert-success">
+                                {{ session('rubrics') }}
+                            </div>
+                        @endif
+                        @if ($errors->has('rubric'))
+                            <span class="alert alert-danger">
+                                <strong>{{ $errors->first('rubric') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-8"></div>
                 </div>
             </div>
         </section>

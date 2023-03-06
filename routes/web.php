@@ -18,6 +18,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('store-form', [
-    PostController::class, 'store'
+Route::post('store-post', [
+    PostController::class, 'storePost'
+]);
+
+Route::post('store-rubric', [
+    PostController::class, 'storeRubric'
 ]);

@@ -23,22 +23,13 @@ class RubricRepository implements RubricRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function create(array $payload, array $parents = []): RubricDomain
+    public function create(array $payload, ?int $parent = null): RubricDomain
     {
         $rubric = $this->model->with([])->create($payload);
-        if (count($parents)) {
-            foreach ($parents as $parent) {
-                $rubric->container()->create([
-                    'rubric_id' => $rubric->id,
-                    'parent_id' => $parent
-                ]);
-            }
-        } else {
-            $rubric->container()->create([
-                'rubric_id' => $rubric->id,
-                'parent_id' => null
-            ]);
-        }
+        $rubric->container()->create([
+            'rubric_id' => $rubric->id,
+            'parent_id' => $parent
+        ]);
 
         return RubricFactory::make(
             $rubric->id,

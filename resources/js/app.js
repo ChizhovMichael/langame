@@ -15,6 +15,9 @@ async function rubrics() {
         });
 
         for (let i = 0; i < elems.length; i++) {
+            if (elems[i].hasAttribute('data-default')) {
+                elems[i].add(new Option('none', ''), undefined);
+            }
             data.forEach((rubric) => {
                 let parent = data.find(x => x.id === rubric.parent_id);
                 let option = new Option(rubric.name, rubric.id);

@@ -9,10 +9,10 @@ interface RubricRepositoryInterface
 {
     /**
      * @param array $payload
-     * @param array $parents
-     * @return void
+     * @param int|null $parent
+     * @return RubricDomain
      */
-    public function create(array $payload, array $parents = []): RubricDomain;
+    public function create(array $payload, ?int $parent = null): RubricDomain;
 
 
     /**
