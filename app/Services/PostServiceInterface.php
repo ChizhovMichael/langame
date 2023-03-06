@@ -32,4 +32,9 @@ interface PostServiceInterface
      * @return Rubric
      */
     public function createRubric(RubricRequest $rubric): Rubric;
+
+    /**
+     * @return Collection
+     */
+    public function getPosts(): Collection;
 }

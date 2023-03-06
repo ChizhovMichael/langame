@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DataFactories\PostFactory;
 use App\DataTransfer\Request\PostRequest;
 use App\DataTransfer\Request\RubricRequest;
 use App\Domain\Post;
@@ -92,5 +93,26 @@ class PostService implements PostServiceInterface
         return $this->rubricRepository->create([
             'name' => $rubric->getName()
         ], $rubric->getParent());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPosts(): Collection
+    {
+        $postRelations = $this->postRepository->getPostsWithRelations(['*'], ['relationship']);
+
+        return $postRelations->map(function ($postRelation) {
+            $rubrics = (new Collection($postRelation->getRelationshipIds()))->map(function ($relationshipId) {
+                return $this->rubricRepository->getRubricByRelationship($relationshipId);
+            });
+            return PostFactory::response(
+                $postRelation->getId(),
+                $postRelation->getTitle(),
+                $postRelation->getDescription(),
+                $postRelation->getContent(),
+                $rubrics
+            );
+        });
     }
 }

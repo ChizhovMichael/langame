@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\DataFactories\RubricFactory;
+use App\DataTransfer\Response\RubricResponse;
 use App\Domain\Rubric as RubricDomain;
 use App\Models\Rubric;
 use Illuminate\Support\Collection;
@@ -86,5 +87,22 @@ class RubricRepository implements RubricRepositoryInterface
                 $item->container->first()->parent_id
             );
         }) ;
+    }
+
+    /**
+     * @param int $relationshipId
+     * @return RubricResponse
+     */
+    public function getRubricByRelationship(int $relationshipId): RubricResponse
+    {
+        $rubric = $this->model->whereHas('container', function($q) use ($relationshipId) {
+            $q->where('id', '=', $relationshipId);
+        })->first();
+
+        return RubricFactory::createResponse(
+            $rubric->id,
+            $rubric->name,
+            $rubric->container->first()->parent_id
+        );
     }
 }

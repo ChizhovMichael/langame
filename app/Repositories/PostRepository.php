@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\DataFactories\PostFactory;
 use App\Domain\Post as PostDomain;
 use App\Models\Post;
+use Illuminate\Support\Collection;
 
 class PostRepository implements PostRepositoryInterface
 {
@@ -32,5 +33,28 @@ class PostRepository implements PostRepositoryInterface
             $post->description,
             $post->content
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPostsWithRelations(array $columns = ['*'], array $relations = []): Collection
+    {
+        $posts = $this->model->with($relations)->get($columns);
+
+        return (new Collection($posts))->map(function ($item) {
+            $container = $item->relationship;
+            $containerIds = null;
+            if ($container) {
+                $containerIds = $container->pluck('rubric_container_id')->toArray();
+            }
+            return PostFactory::relationship(
+                $item->id,
+                $item->title,
+                $item->description,
+                $item->content,
+                $containerIds
+            );
+        }) ;
     }
 }

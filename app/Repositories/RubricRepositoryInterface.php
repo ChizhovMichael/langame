@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\DataTransfer\Response\RubricResponse;
 use App\Domain\Rubric as RubricDomain;
 use Illuminate\Support\Collection;
 
@@ -38,4 +39,10 @@ interface RubricRepositoryInterface
      * @return Collection
      */
     public function all(array $columns = ['*'], array $relations = []): Collection;
+
+    /**
+     * @param int $relationshipId
+     * @return RubricResponse
+     */
+    public function getRubricByRelationship(int $relationshipId): RubricResponse;
 }

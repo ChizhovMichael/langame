@@ -33,4 +33,37 @@ async function rubrics() {
     }
 }
 
+async function posts() {
+    let container = document.getElementById('posts-container');
+
+    if (!container)
+        return;
+
+    try {
+        const response = await axios.get(`/api/posts`);
+        const data = response.data.data;
+
+        data.forEach((post) => {
+            let rubrics = post.rubrics.map((rubric) => {
+                return `<span class="badge bg-light text-dark me-1">${rubric.name}</span>`
+            })
+            let card = `
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${post.title}</h5>
+                            <p class="card-text">${post.description}</p>
+                            ${rubrics.join('')}
+                        </div>
+                    </div>
+                </div>
+            `
+            container.insertAdjacentHTML('beforeend', card);
+        })
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 rubrics();
+posts();

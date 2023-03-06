@@ -79,7 +79,9 @@
                             </span>
                         @endif
                     </div>
-                    <div class="col-12 col-sm-6 col-md-8"></div>
+                    <div class="col-12 col-sm-6 col-md-8">
+                        <div class="row" id="posts-container"></div>
+                    </div>
                 </div>
             </div>
         </section>
