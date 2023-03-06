@@ -11,8 +11,9 @@ RUN apt-get update && apt-get install -y \
         libvpx-dev \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install -j$(nproc) intl \
-    && docker-php-ext-install -j$(nproc) pgsql \
-    && docker-php-ext-install -j$(nproc) pdo_pgsql \
-    && docker-php-ext-install -j$(nproc) exif
+    && docker-php-ext-install -j$(nproc) pdo_mysql \
+    && docker-php-ext-install -j$(nproc) exif \
+    && docker-php-ext-install -j$(nproc) mysqli \ 
+    && docker-php-ext-enable mysqli
 
 RUN usermod -u 1000 www-data

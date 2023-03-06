@@ -31,6 +31,8 @@ services:
         volumes:
             - .:/app
         command: install
+        depends_on:
+            - php
         networks:
             - app
 
