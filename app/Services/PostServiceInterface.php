@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\DataTransfer\Request\PostRequest;
 use App\DataTransfer\Request\RubricRequest;
-use App\Domain\Post;
+use App\DataTransfer\Response\PostResponse;
 use App\Domain\Rubric;
 use Illuminate\Support\Collection;
 
@@ -18,9 +18,9 @@ interface PostServiceInterface
 
     /**
      * @param PostRequest $post
-     * @return Post
+     * @return PostResponse
      */
-    public function createPost(PostRequest $post): Post;
+    public function createPost(PostRequest $post): PostResponse;
 
     /**
      * @return Collection

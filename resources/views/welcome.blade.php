@@ -11,7 +11,27 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 col-md-6">
-
+                        <h4>Asynchronous</h4>
+                        <div class="mb-3">
+                            <div class="form-group mb-3">
+                                <label for="async-title">Title</label>
+                                <input type="text" id="async-title" class="form-control" required="">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="async-category">Category</label>
+                                <select id="async-category" class="form-select js-rubrics" multiple>
+                                </select>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="async-description">Description</label>
+                                <textarea id="async-description" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="async-content">Content</label>
+                                <textarea id="async-content" class="form-control"></textarea>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="js-async">Submit</button>
+                        </div>
                     </div>
                     <div class="col-12 col-md-6">
                         <h4>Not asynchronous</h4>

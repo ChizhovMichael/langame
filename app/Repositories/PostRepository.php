@@ -38,7 +38,7 @@ class PostRepository implements PostRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function getPostsWithRelations(array $columns = ['*'], array $relations = []): Collection
+    public function getPostsWithRelations(array $expression = [], array $columns = ['*'], array $relations = []): Collection
     {
         $posts = $this->model->with($relations)->get($columns);
 

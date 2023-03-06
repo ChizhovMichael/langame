@@ -21,5 +21,5 @@ Route::apiResource('rubrics', RubricController::class)->only([
 ]);
 
 Route::apiResource('posts', PostController::class)->only([
-    'index'
+    'index', 'store'
 ]);

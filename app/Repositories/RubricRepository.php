@@ -90,6 +90,20 @@ class RubricRepository implements RubricRepositoryInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function find(int $id): RubricResponse
+    {
+        $rubric = $this->model->find($id);
+
+        return RubricFactory::createResponse(
+            $rubric->id,
+            $rubric->name,
+            $rubric->container->first()->parent_id
+        );
+    }
+
+    /**
      * @param int $relationshipId
      * @return RubricResponse
      */

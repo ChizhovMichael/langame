@@ -45,4 +45,10 @@ interface RubricRepositoryInterface
      * @return RubricResponse
      */
     public function getRubricByRelationship(int $relationshipId): RubricResponse;
+
+    /**
+     * @param int $id
+     * @return RubricResponse
+     */
+    public function find(int $id): RubricResponse;
 }

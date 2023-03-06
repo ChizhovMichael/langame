@@ -33,6 +33,23 @@ async function rubrics() {
     }
 }
 
+function card(title, description, rubrics, state) {
+    return `
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        ${title}` +
+                        (state ? '<span class="badge bg-primary ms-2">New</span>' : '') +
+                    `</h5>
+                    <p class="card-text">${description ?? ''}</p>
+                    ${rubrics.join('')}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
 async function posts() {
     let container = document.getElementById('posts-container');
 
@@ -47,23 +64,70 @@ async function posts() {
             let rubrics = post.rubrics.map((rubric) => {
                 return `<span class="badge bg-light text-dark me-1">${rubric.name}</span>`
             })
-            let card = `
-                <div class="col-md-6 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">${post.title}</h5>
-                            <p class="card-text">${post.description}</p>
-                            ${rubrics.join('')}
-                        </div>
-                    </div>
-                </div>
-            `
-            container.insertAdjacentHTML('beforeend', card);
+            container.insertAdjacentHTML('beforeend', card(
+                post.title,
+                post.description,
+                rubrics
+            ));
         })
     } catch (error) {
         console.error(error)
     }
 }
 
+function getSelectValues(select) {
+    let result = [];
+    let options = select && select.options;
+    let opt;
+
+    for (let i = 0, len = options.length; i < len; i++) {
+        opt = options[i];
+
+        if (opt.selected) {
+            result.push(opt.value);
+        }
+    }
+    return result;
+}
+
+function create() {
+    let container = document.getElementById('posts-container');
+
+    document.getElementById('js-async').addEventListener('click', async function (e) {
+        e.preventDefault();
+
+        let request = {
+            title: document.getElementById('async-title').value,
+            description: document.getElementById('async-description').value,
+            content: document.getElementById('async-content').value,
+            category: getSelectValues(document.getElementById('async-category')),
+        }
+
+        if (!request.title.length) {
+            alert('Title required');
+            return false;
+        }
+
+        try {
+            const response = await axios.post(`/api/posts`, request);
+            const data = response.data.data;
+
+            let rubrics = data.rubrics.map((rubric) => {
+                return `<span class="badge bg-light text-dark me-1">${rubric.name}</span>`
+            })
+
+            container.insertAdjacentHTML('afterbegin', card(
+                data.title,
+                data.description,
+                rubrics,
+                true
+            ));
+        } catch (error) {
+            console.error(error)
+        }
+    })
+}
+
 rubrics();
 posts();
+create();

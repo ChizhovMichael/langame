@@ -18,5 +18,5 @@ interface PostRepositoryInterface
      * @param array $relations
      * @return Collection
      */
-    public function getPostsWithRelations(array $columns = ['*'], array $relations = []): Collection;
+    public function getPostsWithRelations(array $expression = [], array $columns = ['*'], array $relations = []): Collection;
 }

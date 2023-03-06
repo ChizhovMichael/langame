@@ -5,7 +5,7 @@ namespace App\Services;
 use App\DataFactories\PostFactory;
 use App\DataTransfer\Request\PostRequest;
 use App\DataTransfer\Request\RubricRequest;
-use App\Domain\Post;
+use App\DataTransfer\Response\PostResponse;
 use App\Domain\Rubric;
 use App\Repositories\PostRepositoryInterface;
 use App\Repositories\RubricRepositoryInterface;
@@ -63,7 +63,7 @@ class PostService implements PostServiceInterface
     /**
      * @inheritDoc
      */
-    public function createPost(PostRequest $post): Post
+    public function createPost(PostRequest $post): PostResponse
     {
         $dt = $this->postRepository->create([
             'title' => $post->getTitle(),
@@ -74,7 +74,17 @@ class PostService implements PostServiceInterface
             $this->rubricRepository->link($dt->getId(), $rubricId);
         }
 
-        return $dt;
+        $rubrics = (new Collection($post->getCategory()))->map(function ($rubricId) {
+            return $this->rubricRepository->find($rubricId);
+        });
+
+        return PostFactory::response(
+            $dt->getId(),
+            $dt->getTitle(),
+            $dt->getDescription(),
+            $dt->getContent(),
+            $rubrics
+        );
     }
 
     /**
@@ -100,7 +110,7 @@ class PostService implements PostServiceInterface
      */
     public function getPosts(): Collection
     {
-        $postRelations = $this->postRepository->getPostsWithRelations(['*'], ['relationship']);
+        $postRelations = $this->postRepository->getPostsWithRelations([], ['*'], ['relationship']);
 
         return $postRelations->map(function ($postRelation) {
             $rubrics = (new Collection($postRelation->getRelationshipIds()))->map(function ($relationshipId) {
